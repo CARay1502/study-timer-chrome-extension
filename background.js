@@ -1,23 +1,175 @@
+// Configuration
+const STUDY_MINUTES = 25;
+const LOG_INTERVAL_MS = 300_000; // 5 minutes
+
+// Timer state
+let timerState = {
+    isRunning: false,
+    startTime: null,
+    endTime: null,
+    countdownTimer: null,
+    captureInterval: null
+};
+
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Study Timer extension installed.");
     
-    // Initialize storage if needed
-    chrome.storage.local.get({ logs: [] }, (data) => {
+    // Initialize storage
+    chrome.storage.local.get({ logs: [], timerState: null }, (data) => {
         if (!data.logs) {
             chrome.storage.local.set({ logs: [] });
         }
     });
 });
 
-// Handle tab updates to potentially log active tab changes
-chrome.tabs.onActivated.addListener((activeInfo) => {
-    // This could be used to track tab switches during study sessions
-    // For now, just logging for debugging
-    console.log('Tab activated:', activeInfo.tabId);
+// Listen for messages from popup
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    switch (message.action) {
+        case 'startTimer':
+            startStudySession();
+            sendResponse({ success: true, state: getTimerState() });
+            break;
+            
+        case 'stopTimer':
+            stopStudySession();
+            sendResponse({ success: true, state: getTimerState() });
+            break;
+            
+        case 'getTimerState':
+            sendResponse({ state: getTimerState() });
+            break;
+            
+        default:
+            sendResponse({ error: 'Unknown action' });
+    }
+    return true; // Keep message channel open for async response
 });
 
-// Clean up old logs periodically (optional feature)
+function getTimerState() {
+    const now = Date.now();
+    let secondsLeft = 0;
+    
+    if (timerState.isRunning && timerState.endTime) {
+        secondsLeft = Math.max(0, Math.floor((timerState.endTime - now) / 1000));
+    }
+    
+    return {
+        isRunning: timerState.isRunning,
+        startTime: timerState.startTime,
+        endTime: timerState.endTime,
+        secondsLeft: secondsLeft,
+        totalMinutes: timerState.startTime ? Math.round((now - timerState.startTime) / 60000) : 0
+    };
+}
+
+function startStudySession() {
+    if (timerState.isRunning) return;
+    
+    const now = Date.now();
+    timerState.isRunning = true;
+    timerState.startTime = now;
+    timerState.endTime = now + (STUDY_MINUTES * 60 * 1000);
+    
+    // Set up countdown timer
+    timerState.countdownTimer = setInterval(() => {
+        const state = getTimerState();
+        
+        // Notify popup if it's open
+        chrome.runtime.sendMessage({ 
+            action: 'timerUpdate', 
+            state: state 
+        }).catch(() => {
+            // Popup not open, ignore error
+        });
+        
+        if (state.secondsLeft <= 0) {
+            stopStudySession();
+        }
+    }, 1000);
+    
+    // Set up screenshot interval
+    captureAndLog(); // Immediate first capture
+    timerState.captureInterval = setInterval(captureAndLog, LOG_INTERVAL_MS);
+    
+    console.log('Study session started');
+}
+
+function stopStudySession() {
+    if (!timerState.isRunning) return;
+    
+    // Clear intervals
+    if (timerState.countdownTimer) {
+        clearInterval(timerState.countdownTimer);
+        timerState.countdownTimer = null;
+    }
+    
+    if (timerState.captureInterval) {
+        clearInterval(timerState.captureInterval);
+        timerState.captureInterval = null;
+    }
+    
+    // Final capture
+    captureAndLog();
+    
+    // Reset timer state
+    timerState.isRunning = false;
+    timerState.endTime = null;
+    
+    // Notify popup if it's open
+    chrome.runtime.sendMessage({ 
+        action: 'timerStopped', 
+        state: getTimerState() 
+    }).catch(() => {
+        // Popup not open, ignore error
+    });
+    
+    console.log('Study session stopped');
+}
+
+async function captureAndLog() {
+    try {
+        // Get active tab
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (!tab) return;
+
+        let screenshot = null;
+        
+        // Try to capture screenshot, skip for protected URLs
+        if (!tab.url.startsWith('chrome://') && 
+            !tab.url.startsWith('chrome-extension://') && 
+            !tab.url.startsWith('moz-extension://') &&
+            !tab.url.startsWith('file://')) {
+            
+            try {
+                screenshot = await chrome.tabs.captureVisibleTab();
+            } catch (captureError) {
+                console.log('Could not capture screenshot:', captureError.message);
+            }
+        }
+
+        // Create log entry
+        const entry = {
+            time: new Date().toISOString(),
+            title: tab.title || 'Unknown',
+            url: tab.url,
+            screenshot: screenshot
+        };
+
+        // Save to storage
+        chrome.storage.local.get({ logs: [] }, (data) => {
+            data.logs.push(entry);
+            chrome.storage.local.set({ logs: data.logs });
+        });
+        
+        console.log('Logged tab:', tab.title);
+        
+    } catch (error) {
+        console.error('Error in captureAndLog:', error);
+    }
+}
+
+// Handle extension startup - restore timer if it was running
 chrome.runtime.onStartup.addListener(() => {
-    // You could add logic here to clean up logs older than X days
-    console.log("Study Timer extension started.");
+    console.log("Study Timer extension started");
+    // You could add logic here to restore timer state if needed
 });
