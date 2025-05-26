@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "Study Timer",
+    "description": "Pomodoro timer that logs visited tabs and screenshots for proof of studying",
+    "version": "1.0",
+    "permissions": ["tabs", "storage", "scripting", "activeTab"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    },
+    "host_permissions": ["<all_urls>"]
+}
