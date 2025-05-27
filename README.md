@@ -27,8 +27,8 @@
 
 ## 🖼️ Screenshots
 
-![Popup UI](Screenshot 2025-05-26 201001.png)
-![Report](Screenshot 2025-05-26 201341.png)
+![Popup UI](https://github.com/CARay1502/study-timer-chrome-extension/blob/main/Screenshot%202025-05-26%20201341.png)
+![Report](https://github.com/CARay1502/study-timer-chrome-extension/blob/main/Screenshot%202025-05-26%20201341.png)
 
 ---
 
