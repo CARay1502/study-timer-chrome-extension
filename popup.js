@@ -100,7 +100,7 @@ function buildHtmlReport(logs) {
         <title>Study Report</title>
         <style>
             body{font-family:system-ui,sans-serif;margin:1rem;line-height:1.4}
-            img{max-width:100%;border:1px solid #ccc;margin-top:0.5rem}
+            img{max-width:50%;border:1px solid #ccc;margin-top:0.5rem}
             .entry{margin-bottom:1.5rem;padding:1rem;border:1px solid #eee}
             .no-screenshot{color:#666;font-style:italic}
         </style>
