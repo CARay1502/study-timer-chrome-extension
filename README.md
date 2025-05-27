@@ -27,9 +27,8 @@
 
 ## 🖼️ Screenshots
 
-| Popup Timer | Exported Report |
-|-------------|-----------------|
-| ![Popup UI](Screenshot 2025-05-26 201001.png) | ![Report](Screenshot 2025-05-26 201341.png) |
+![Popup UI](Screenshot 2025-05-26 201001.png)
+![Report](Screenshot 2025-05-26 201341.png)
 
 ---
 
