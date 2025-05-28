@@ -123,6 +123,10 @@ button:disabled {
   background-color: var(--dark-button);
   color: var(--highlight);
 }
+#exportBtn:hover {
+  background-color: var(--dark-accent);
+  color: var(--primary);
+}
 .countdown {
   font-size: 4rem;
   font-weight: 400;
