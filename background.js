@@ -48,9 +48,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function getTimerState() {
     const now = Date.now();
     let secondsLeft = 0;
-    
+    let totalSeconds = STUDY_MINUTES * 60; // Fixed: declare totalSeconds properly
+    let elapsedSeconds = 0;
+
     if (timerState.isRunning && timerState.endTime) {
         secondsLeft = Math.max(0, Math.floor((timerState.endTime - now) / 1000));
+        elapsedSeconds = totalSeconds - secondsLeft; // Calculate elapsed time
     }
     
     return {
@@ -58,6 +61,8 @@ function getTimerState() {
         startTime: timerState.startTime,
         endTime: timerState.endTime,
         secondsLeft: secondsLeft,
+        totalSeconds: totalSeconds, // Always return the full duration
+        elapsedSeconds: elapsedSeconds, // Add elapsed seconds for easier calculation
         totalMinutes: timerState.startTime ? Math.round((now - timerState.startTime) / 60000) : 0
     };
 }

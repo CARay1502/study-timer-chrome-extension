@@ -5,13 +5,31 @@ const statusEl = document.getElementById("status");
 const exportBtn = document.getElementById("exportBtn");
 const countdown = document.getElementById("countdown");
 
+const progressCircle = document.getElementById('progressCircle');
+
 // Update interval for UI
-let uiUpdateInterval = null;
+
+let CIRCUMFERENCE = 0;
+if (progressCircle) {
+    const radius = progressCircle.r.baseVal.value;
+    CIRCUMFERENCE = 2 * Math.PI * radius;
+    progressCircle.style.strokeDasharray = CIRCUMFERENCE;
+    updateProgress(0);
+}
 
 function secondsToMMSS(sec) {
     const m = String(Math.floor(sec / 60)).padStart(2, "0");
     const s = String(sec % 60).padStart(2, "0");
     return `${m}:${s}`;
+}
+
+function updateProgress(percent) {
+    if (!progressCircle) return;
+    // Clamp percent between 0 and 1
+    const clampedPercent = Math.min(Math.max(percent, 0), 1);
+    // Calculate offset (starts full and decreases as progress increases)
+    const offset = CIRCUMFERENCE * (1 - clampedPercent);
+    progressCircle.style.strokeDashoffset = offset;
 }
 
 function updateUI(timerState) {
@@ -20,11 +38,22 @@ function updateUI(timerState) {
         stopBtn.disabled = false;
         statusEl.textContent = "Studying…";
         countdown.textContent = secondsToMMSS(timerState.secondsLeft);
+
+        // Calculate progress as elapsed/total
+        const progressPercent = timerState.totalSeconds > 0 ? 
+            timerState.elapsedSeconds / timerState.totalSeconds : 0;
+        
+        updateProgress(progressPercent);
+        
+        console.log(`Progress: ${timerState.elapsedSeconds}/${timerState.totalSeconds} = ${progressPercent.toFixed(2)}`);
     } else {
         startBtn.disabled = false;
         stopBtn.disabled = true;
         statusEl.textContent = timerState.startTime ? "Session ended." : "Ready to study?";
         countdown.textContent = timerState.startTime ? "00:00" : "";
+        
+        // Reset progress ring
+        updateProgress(timerState.startTime ? 1 : 0); // Full if session just ended, empty if ready to start
     }
 }
 

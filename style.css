@@ -1,26 +1,108 @@
-body {
-  font-family: system-ui, sans-serif;
-  width: 300px;
-  margin: 0;
-  padding: 1rem;
-  text-align: center;
+:root {
+  --primary: #ddd2c1;
+  --secondary: #b9b4ac;
+  --background: #3d3838;
+  --bg-light: #5d5858;
+  --accent: #ff914d;
+  --highlight: #ff3131;
+
+  --ring-size: 100%;  
+  --ring-thickness: 1.25rem;     
+  --track-color: rgba(255,255,255,0.08); 
 }
 
+body {
+  font-family: system-ui, sans-serif;
+  width: 400px;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+  color: var(--primary);
+  background-color: var(--bg-light);
+}
+
+.progress-ring {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#ring-wrapper {
+  padding: 1rem;
+  width: var(--ring-size);
+  height: var(--ring-size);
+  position: relative; 
+  background-color: var(--accent);
+  border-radius: 2rem;
+}
+svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);  /* start at 12 o’clock */
+    }
+
+    circle {
+      fill: none;
+      stroke-width: var(--ring-thickness);
+      stroke-linecap: round;
+    }
+    .track {
+      stroke: var(--secondary);
+    }
+    .progress {
+      stroke: var(--highlight);
+      transition: stroke-dashoffset 0.5s linear;
+    }
+.timer-holder {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--background);
+  border-radius: 2rem;
+  padding: 0.5rem;
+}
+.left {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+.right {
+  width: 100%;
+  text-align: center;
+}
 .status {
   margin-bottom: 0.75rem;
   font-weight: 600;
+  font-size: 2rem;
 }
 
 .buttons {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  flex-direction: row;
+  gap: 1rem;
+  width: 100%;
+  padding-top: 1rem;
 }
 
+.timer-title {
+  color: var(--secondary);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
 button {
+  flex: 1;
   padding: 0.4rem 0.6rem;
   font-size: 0.9rem;
   cursor: pointer;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease-in-out;
+  color: black;
+}
+
+button:hover {
+  background-color: var(--secondary);
 }
 
 button:disabled {
@@ -29,7 +111,7 @@ button:disabled {
 }
 
 .countdown {
-  margin-top: 0.75rem;
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 4rem;
+  font-weight: 400;
+  color: var(--primary);
 }
