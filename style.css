@@ -1,14 +1,17 @@
 :root {
-  --primary: #ddd2c1;
-  --secondary: #b9b4ac;
-  --background: #3d3838;
-  --bg-light: #5d5858;
-  --accent: #ff914d;
-  --highlight: #ff3131;
+  --primary: white;
+  --secondary: #d4d5d9;
+  --background: #030304;
+  --button: #B4B5B8;
+  --dark-button: #314c69;
+  --bg-light: #D5D6D9;
+  --accent: #194d6a;
+  --dark-accent: #233649;
+  --highlight: #18d6f1;
 
   --ring-size: 100%;  
   --ring-thickness: 1.25rem;     
-  --track-color: rgba(255,255,255,0.08); 
+  --track-color: var(--dark-accent); 
 }
 
 body {
@@ -21,6 +24,9 @@ body {
   background-color: var(--bg-light);
 }
 
+.title {
+  color: var(--accent);
+}
 .progress-ring {
   display: flex;
   justify-content: center;
@@ -47,7 +53,7 @@ svg {
       stroke-linecap: round;
     }
     .track {
-      stroke: var(--secondary);
+      stroke: var(--track-color);
     }
     .progress {
       stroke: var(--highlight);
@@ -93,16 +99,19 @@ svg {
 }
 button {
   flex: 1;
-  padding: 0.4rem 0.6rem;
+  padding: 0.8rem 0.6rem;
   font-size: 0.9rem;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
+  border: 0px;
+  background-color: var(--button);
   transition: background-color 0.3s ease-in-out;
-  color: black;
+  color: var(--primary);
 }
 
 button:hover {
-  background-color: var(--secondary);
+  background-color: var(--accent);
 }
 
 button:disabled {
@@ -110,6 +119,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#exportBtn {
+  background-color: var(--dark-button);
+  color: var(--highlight);
+}
 .countdown {
   font-size: 4rem;
   font-weight: 400;
