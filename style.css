@@ -21,11 +21,12 @@ body {
   padding: 0.5rem;
   text-align: center;
   color: var(--primary);
-  background-color: var(--bg-light);
+  background: #020024;
+  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(25, 77, 106, 1) 35%, rgba(24, 214, 241, 1) 100%);
 }
 
 .title {
-  color: var(--accent);
+  color: var(--primary);
 }
 .progress-ring {
   display: flex;
@@ -59,6 +60,7 @@ svg {
       stroke: var(--highlight);
       transition: stroke-dashoffset 0.5s linear;
     }
+  
 .timer-holder {
   width: fit-content;
   display: flex;
