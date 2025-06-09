@@ -1,13 +1,13 @@
 # Study Timer with Accountability ⏱️
 
-> **Chrome Extension · Manifest V3 · Privacy-first**  
-> Build & ship in minutes – proof-of-focus for students & professionals.
+> **Chrome Extension · Manifest V3 · Feature Implementation**  
+> In Pre-Alpha Release before being released to Chrome Ext. Store
 
 ---
 
 ## 🚀 Project at a Glance
 
-| What | Why it matters to you (recruiter) |
+| What | Why it matters to you |
 |------|-----------------------------------|
 | **MV3 Chrome Extension** | Shows comfort with modern browser APIs, service-worker background scripts, and tight permission scopes. |
 | **Periodic Screenshots & Tab Logs** | Demonstrates real-world handling of sensitive data, UI feedback loops, and local storage performance. |
