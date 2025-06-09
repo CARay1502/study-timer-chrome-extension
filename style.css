@@ -21,19 +21,29 @@ body {
   padding: 0.5rem;
   text-align: center;
   color: var(--primary);
-  background: #020024;
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(25, 77, 106, 1) 35%, rgba(24, 214, 241, 1) 100%);
+  background: var(--background);
+}
+
+.div-with-radial-gradient-shadow {
+  position: relative;
+  background: transparent;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .title {
   color: var(--primary);
 }
+
 .progress-ring {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
 }
+
 #ring-wrapper {
   padding: 1rem;
   width: var(--ring-size);
@@ -42,10 +52,11 @@ body {
   background-color: var(--accent);
   border-radius: 2rem;
 }
+
 svg {
       width: 100%;
       height: 100%;
-      transform: rotate(-90deg);  /* start at 12 o’clock */
+      transform: rotate(-90deg);  /* start at 12 o'clock */
     }
 
     circle {
@@ -68,7 +79,30 @@ svg {
   background-color: var(--background);
   border-radius: 2rem;
   padding: 0.5rem;
+  position: relative;
+  z-index: 2;
+  /* Alternative: Multiple box-shadows for gradient effect */
+  box-shadow: 
+    0 0 20px rgba(24, 214, 241, 0.4),
+    0 0 40px rgba(25, 77, 106, 0.3),
+    0 0 60px rgba(2, 0, 36, 0.2);
 }
+
+/* Gradient shadow using pseudo-element (backup method) */
+.timer-holder::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, rgba(24, 214, 241, 0.6) 0%, rgba(25, 77, 106, 0.4) 50%, rgba(2, 0, 36, 0.2) 100%);
+  filter: blur(15px);
+  z-index: -1;
+  border-radius: 2rem;
+  transform: scale(1.2);
+}
+
 .left {
   width: 100%;
   text-align: left;
@@ -76,10 +110,12 @@ svg {
   flex-direction: column;
   padding-left: 1rem;
 }
+
 .right {
   width: 100%;
   text-align: center;
 }
+
 .status {
   margin-bottom: 0.75rem;
   font-weight: 600;
@@ -99,6 +135,7 @@ svg {
   font-size: 1.25rem;
   font-weight: 500;
 }
+
 button {
   flex: 1;
   padding: 0.8rem 0.6rem;
@@ -107,13 +144,13 @@ button {
   cursor: pointer;
   border-radius: 0.6rem;
   border: 0px;
-  background-color: var(--button);
+  background-color: var(--accent);
   transition: background-color 0.3s ease-in-out;
   color: var(--primary);
 }
 
 button:hover {
-  background-color: var(--accent);
+  background-color: var(--button);
 }
 
 button:disabled {
@@ -125,10 +162,12 @@ button:disabled {
   background-color: var(--dark-button);
   color: var(--highlight);
 }
+
 #exportBtn:hover {
   background-color: var(--dark-accent);
   color: var(--primary);
 }
+
 .countdown {
   font-size: 4rem;
   font-weight: 400;

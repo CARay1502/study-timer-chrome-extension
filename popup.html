@@ -9,27 +9,30 @@
     <body>
         <h1 class="title">Study Timer</h1>
         
-        <div class="timer-holder">
-            <div class="left">
-                <h3 class="timer-title">Timer</h3>
-                <div id="countdown" class="countdown"></div>
-                <div id="status">Ready to study?</div>
-            </div>
-            <div class="right">
-                <div class="progress-ring">
-                    <div id="ring-wrapper">
-                        <svg viewBox="0 0 160 160">
-                            <!-- background/track circle -->
-                            <circle class="track" cx="80" cy="80" r="70" />
-                            <!-- animated progress circle -->
-                            <circle id="progressCircle" class="progress" cx="80" cy="80" r="70" />
-                        </svg>
+        <div class="div-with-radial-gradient-shadow">
+            <div class="timer-holder">
+                <div class="left">
+                    <h3 class="timer-title">Timer</h3>
+                    <div id="countdown" class="countdown"></div>
+                    <div id="status">Ready to study?</div>
+                </div>
+                <div class="right">
+                    <div class="progress-ring">
+                        <div id="ring-wrapper">
+                            <svg viewBox="0 0 160 160">
+                                <!-- background/track circle -->
+                                <circle class="track" cx="80" cy="80" r="70" />
+                                <!-- animated progress circle -->
+                                <circle id="progressCircle" class="progress" cx="80" cy="80" r="70" />
+                            </svg>
 
-                        <!-- centred pause button (optional) -->
+                            <!-- centred pause button (optional) -->
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="buttons">
                     <button id="startBtn">Start</button>
                     <button id="stopBtn" disabled>Stop</button>

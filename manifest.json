@@ -3,10 +3,9 @@
     "name": "Study Timer",
     "description": "Pomodoro timer that logs visited tabs and screenshots for proof of studying",
     "version": "0.1.0",
-    "permissions": ["tabs", "storage", "scripting", "activeTab"],
+    "permissions": ["tabs", "storage", "scripting", "activeTab", "offscreen", "notifications"],
     "background": {
         "service_worker": "background.js"
-
     },
     "action": {
         "default_popup": "popup.html"

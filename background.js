@@ -1,5 +1,5 @@
 // Configuration
-const STUDY_MINUTES = 25;
+const STUDY_MINUTES = 1;
 const LOG_INTERVAL_MS = 300_000; // 5 minutes
 
 // Timer state
@@ -10,6 +10,9 @@ let timerState = {
     countdownTimer: null,
     captureInterval: null
 };
+
+//New offscreen document manager
+let offscreenDocumentCreated = false;
 
 chrome.runtime.onInstalled.addListener(() => {
     console.log("Study Timer extension installed.");
@@ -67,6 +70,36 @@ function getTimerState() {
     };
 }
 
+// new play function for playCompletionSound() when timer is up
+//create new offscreen doc for audio background
+async function createOffscreenDocument() {
+    if (offscreenDocumentCreated) return;
+
+    try {
+        await chrome.offscreen.createDocument({
+            url: 'offscreen.html',
+            reasons: ['AUDIO_PLAYBACK'],
+            justification: 'Play notification sound when study timer completes'
+        });
+        offscreenDocumentCreated = true;
+        console.log('Offscreen document created for audio playback');
+    } catch (error) {
+        console.error('Error creating offscreen document: ', error);
+    }
+}
+
+//function for making sure offscreen doc exists and play sound
+async function playCompletionSound() {
+    try {
+        await createOffscreenDocument();
+
+        chrome.runtime.sendMessage({ action: 'playCompletionSound' });
+        console.log('Completion sound triggered');
+    } catch (error) {
+        console.error('Error playing completion sound: ', error);
+    }
+}
+
 function startStudySession() {
     if (timerState.isRunning) return;
     
@@ -116,6 +149,9 @@ function stopStudySession() {
     // Final capture
     captureAndLog();
     
+    //Play sond when timer complete
+    playCompletionSound();
+
     // Reset timer state
     timerState.isRunning = false;
     timerState.endTime = null;
@@ -173,8 +209,6 @@ async function captureAndLog() {
     }
 }
 
-// Handle extension startup - restore timer if it was running
 chrome.runtime.onStartup.addListener(() => {
     console.log("Study Timer extension started");
-    // You could add logic here to restore timer state if needed
 });

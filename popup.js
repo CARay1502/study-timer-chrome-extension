@@ -23,6 +23,12 @@ function secondsToMMSS(sec) {
     return `${m}:${s}`;
 }
 
+//Alarm sound playing function
+function playAlarmSound() {
+    const audio = new Audio(chrome.runtime.getURL("sounds\notification.wav"));
+    audio.play();
+}
+
 function updateProgress(percent) {
     if (!progressCircle) return;
     // Clamp percent between 0 and 1
@@ -76,7 +82,6 @@ function stopSession() {
 }
 
 function startUIUpdates() {
-    if (uiUpdateInterval) return; // Already running
     
     uiUpdateInterval = setInterval(() => {
         chrome.runtime.sendMessage({ action: 'getTimerState' }, (response) => {
@@ -91,6 +96,14 @@ function startUIUpdates() {
         });
     }, 1000);
 }
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'playAlarmSound') {
+        const audio = new Audio(chrome.runtime.getURL("sounds/alarm.mp3"));
+        audio.play();
+    }
+});
+
 
 function stopUIUpdates() {
     if (uiUpdateInterval) {
