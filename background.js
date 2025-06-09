@@ -186,7 +186,7 @@ async function captureAndLog() {
 
         let screenshot = null;
         
-        // Try to capture screenshot, skip for protected URLs
+        // CApture URL's, skips if protected URL (for extra privacy)
         if (!tab.url.startsWith('chrome://') && 
             !tab.url.startsWith('chrome-extension://') && 
             !tab.url.startsWith('moz-extension://') &&

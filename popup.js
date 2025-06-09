@@ -137,6 +137,7 @@ function buildHtmlReport(logs) {
     const totalMinutes = logs.length > 1 ? 
         Math.round((new Date(logs[logs.length - 1].time) - new Date(logs[0].time)) / 60000) : 0;
 
+        // html setup for exporting reports (will make pretty later/future updates)
     let html = `
         <!DOCTYPE html><html><head><meta charset="utf-8">
         <title>Study Report</title>
@@ -171,7 +172,7 @@ function buildHtmlReport(logs) {
     return html;
 }
 
-// Listen for messages from background script
+// Listen for messages from background.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.action) {
         case 'timerUpdate':
@@ -184,12 +185,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
 });
 
-// Event listeners
+// Event listeners for buttons
 startBtn.addEventListener("click", startSession);
 stopBtn.addEventListener("click", stopSession);
 exportBtn.addEventListener("click", exportReport);
 
-// Initialize UI when popup opens
+// Initialize UI when popup is opened
 document.addEventListener('DOMContentLoaded', () => {
     // Get current timer state from background
     chrome.runtime.sendMessage({ action: 'getTimerState' }, (response) => {
@@ -201,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 startUIUpdates();
             }
         } else {
-            // Default state
+            // Default state -> Before timer is started/updated
             statusEl.textContent = "Ready to study?";
         }
     });
