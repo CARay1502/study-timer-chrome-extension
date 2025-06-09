@@ -1,5 +1,5 @@
 // Configuration
-const STUDY_MINUTES = 1;
+const STUDY_MINUTES = 25;
 const LOG_INTERVAL_MS = 300_000; // 5 minutes
 
 // Timer state
